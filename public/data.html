@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+<form id="fruit" action="http://localhost:3000/api" method="post">
+  <label for="date">Date(Ex:2023年5月)</label>
+  <input type="text" id="date" name="date">
+  <label for="name">Name(Ex:水果)</label>
+  <input type="text" id="name" name="name">
+  <label for="price">Price(Ex:89.12)</label>
+  <input type="text" id="price" name="price">
+  <button type="submit">Submit</button>
+</form>
+<div id="app">
+  <button v-on:click="handleClick">顯示資料</button>
+  <table>
+    <thead>
+    <tr>
+      <th>id</th>
+      <th>date</th>
+      <th>name</th>
+      <th>price</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr v-for="item in data">
+      <td>{{ item.id }}</td>
+      <td>{{ item.date}}</td>
+      <td>{{ item.name }}</td>
+      <td>{{ item.price }}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        data: []
+      };
+    },
+    methods: {
+      async handleClick() {
+        console.log("data");
+
+        const url = "http://localhost:3000/api"; // 資料傳送到的 URL
+        try {
+          const response = await fetch(url, {
+            method: 'GET',
+          });
+          const res_data = await response.json();
+          this.data = res_data ;
+          console.log("成功", res_data );
+        } catch (error) {
+          console.log("錯誤", error);
+        }
+      }
+    }
+  });
+
+  app.mount('#app');
+</script>
+</body>
+</html>
